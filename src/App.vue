@@ -1,102 +1,58 @@
 <template>
   <div id="app">
-    <div class="container">
-      <aside class="search-sidebar">
-        <SearchComponent :activeTab="activeTab" @search="handleSearch" @yay="handleYay" />
-      </aside>
-      <main class="main-content">
-        <nav class="tabs">
-          <button v-for="tab in tabs" :key="tab" @click="activeTab = tab" :class="{ active: activeTab === tab }">
-            {{ tab }}
-          </button>
-        </nav>
-        <div class="filters-section" v-if="activeTab != 'Home'">
-          <div class="filters-header" @click="toggleFilters">
-            Filters
-            <span :class="['arrow', { 'down': !filtersOpen, 'up': filtersOpen }]">▼</span>
-          </div>
-          <transition name="slide">
-            <div v-if="filtersOpen" class="filters-content">
-              <div class="filter-field">
-                <label for="people-filter">People:</label>
-                <input id="people-filter" v-model="peopleFilter" type="text" placeholder="Search people...">
-              </div>
-              <div class="filter-field">
-                <label for="party-filter">Party:</label>
-                <input id="party-filter" v-model="partyFilter" type="text" placeholder="Search party...">
-              </div>
-            </div>
-          </transition>
+    <v-app id="medavista">
+      <v-theme-provider theme="dark"> <!-- can be changed https://vuetifyjs.com/en/features/theme/#changing-theme -->
+      <v-app-bar app  :elevation="2">
+        <v-toolbar-title>SweTerror-portalen</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn>Exempel</v-btn>
+        <v-btn>Om </v-btn>
+      </v-app-bar>
+
+      <!-- left search drawer -->
+      <v-navigation-drawer permanent class="drawer" :width="300"> <!-- TODO responsive -->
+        <h2>Sökord</h2>
+        <v-text-field 
+          clearable
+          @keyup.enter="addWord" 
+          label="Lägg till sökord" 
+          variant="outlined" 
+          class="input"
+          v-model="newWord"
+          ></v-text-field>
+        <div class="chips">
+          <v-chip 
+            v-for="word in words" :key="word" 
+            closable        
+            @click="removeWord(word)" 
+            class="word">{{ word }}
+          </v-chip>
         </div>
-        <div class="tab-content">
-          <component :is="activeTabComponent"></component>
-        </div>
-      </main>
-    </div>
+      </v-navigation-drawer>
+      </v-theme-provider>
+    </v-app>
+
   </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue'
-import SearchComponent from './components/SearchComponent.vue'
-import SearchTab from './components/SearchTab.vue'
-import StatsTab from './components/StatsTab.vue'
-import NetworkTab from './components/NetworkTab.vue'
-import MeTab from './components/MeTab.vue'
-import HomeTab from './components/HomeTab.vue'
 
-export default {
-  name: 'App',
-  components: {
-    SearchComponent,
-    SearchTab,
-    StatsTab,
-    NetworkTab,
-    MeTab,
-    HomeTab
-  },
-  setup() {
-    const tabs = ['Home', 'Search', 'Stats', 'Network', 'Me']
-    const activeTab = ref('Home')
-    const filtersOpen = ref(false)
-    const peopleFilter = ref('')
-    const partyFilter = ref('')
+<script setup lang="ts">
+import { ref } from 'vue'
 
-    const activeTabComponent = computed(() => {
-      switch (activeTab.value) {
-        case 'Home': return HomeTab
-        case 'Search': return SearchTab
-        case 'Stats': return StatsTab
-        case 'Network': return NetworkTab
-        case 'Me': return MeTab
-        default: return HomeTab
-      }
-    })
+const newWord = ref('')
+const words = ref<string[]>([])
 
-    const toggleFilters = () => {
-      filtersOpen.value = !filtersOpen.value
-    }
-
-    const handleSearch = (searchData) => {
-      console.log('Search data:', searchData)
-    }
-
-    const handleYay = () => {
-      console.log('Yay!')
-    }
-    return {
-      tabs,
-      activeTab,
-      activeTabComponent,
-      filtersOpen,
-      toggleFilters,
-      peopleFilter,
-      partyFilter,
-      handleSearch,
-      handleYay
-    }
+const addWord = () => {
+  if (newWord.value) {
+    words.value.push(newWord.value)
+    newWord.value = ''
   }
 }
+
+const removeWord = (word: string) => {
+  words.value = words.value.filter(w => w !== word)
+}
+
 </script>
 
 <style scoped>
@@ -104,16 +60,26 @@ export default {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.drawer {
+  padding: 20px;
+  margin: 20px;
+  height: fit-content;
+  border-radius: 10px;
+}
+
+.input {
+  padding-top: 20px;
+}
+
+.word {
+  margin: 5px;
+}
+
 .container {
   display: flex;
   height: 100vh;
+  
 }
-
-.search-sidebar {
-  width: 300px;
-  border-right: 1px solid rgb(0, 0, 0);
-}
-
 .main-content {
   flex-grow: 1;
   display: flex;
