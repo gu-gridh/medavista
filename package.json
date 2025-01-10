@@ -16,7 +16,6 @@
   "dependencies": {
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
-    "vue-3-slider-component": "^1.0.0",
     "vue-router": "^4.3.3",
     "vuetify": "^3.7.4"
   },
