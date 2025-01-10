@@ -1,19 +1,27 @@
 @import './base.css';
 
 #app {
-  
-  margin: 0 auto;
-  padding: 2rem;
   font-weight: normal;
+  width: 100% !important;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+#medavista {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  color: white;
 }
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
 
 @media (hover: hover) {
   a:hover {
@@ -25,11 +33,13 @@ a,
   body {
     display: flex;
     place-items: center;
+    width: 100vw;
+    margin: 0;
+
   }
 
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
   }
 }
