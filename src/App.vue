@@ -84,7 +84,7 @@ const onClick = () => {
 
 
 .inner-nav {
-  
+  margin-left: 2px;
   padding-bottom: 20px;
   padding-right: 20px;
 }
@@ -98,6 +98,7 @@ const onClick = () => {
 .results-tabs {
   margin-top: 20px;
   margin-right: 20px;
+  margin-left: 30px;
   padding: 0px 10px;
   border-radius: 10px;
 }
